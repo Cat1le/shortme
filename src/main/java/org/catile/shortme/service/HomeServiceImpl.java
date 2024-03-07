@@ -19,9 +19,7 @@ public record HomeServiceImpl(ShortlinkRepository repo) implements HomeService {
 
     @Override
     public String create(String url) {
-        var link = new Shortlink();
-        link.setId(createId());
-        link.setUrl(url);
+        var link = new Shortlink(createId(), url);
         repo.save(link);
         return link.getId();
     }

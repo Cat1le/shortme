@@ -23,8 +23,9 @@ public class Shortlink {
 
     private Date createdAt;
 
-    @PrePersist
-    void prePersist() {
-        createdAt = new Date();
+    public Shortlink(String id, String url) {
+        this.id = id;
+        this.url = url;
+        this.createdAt = new Date();
     }
 }
