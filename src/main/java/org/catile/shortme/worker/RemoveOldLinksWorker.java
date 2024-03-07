@@ -1,6 +1,7 @@
 package org.catile.shortme.worker;
 
 import org.catile.shortme.repo.ShortlinkRepository;
+import org.hibernate.dialect.PostgreSQLDialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,10 @@ import java.util.stream.StreamSupport;
 @Component
 public record RemoveOldLinksWorker(
         ShortlinkRepository repo,
-        @Value("${removeOldLinksWorker.ttl-value}") long ttlValue,
-        @Value("${removeOldLinksWorker.ttl-unit}") String ttlUnit
+        @Value("${worker.old-links.ttl-value}") long ttlValue,
+        @Value("${worker.old-links.ttl-unit}") String ttlUnit
 ) {
-    @Scheduled(cron = "${removeOldLinksWorker.cron}")
+    @Scheduled(cron = "${worker.old-links.cron}")
     void removeOldLinks() {
         var expiredCreatedAt = Date.from(Instant.now().minus(
                 ttlValue,
