@@ -5,10 +5,14 @@ import org.catile.shortme.repo.ShortlinkRepository;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
-public record HomeServiceImpl(ShortlinkRepository repo) implements HomeService {
+public record ShortlinkServiceImpl(ShortlinkRepository repo) implements ShortlinkService {
     private static final int MAX_ID_VALUE = 1048576;
     private static final SecureRandom RANDOM = new SecureRandom();
 
@@ -22,6 +26,11 @@ public record HomeServiceImpl(ShortlinkRepository repo) implements HomeService {
         var link = new Shortlink(createId(), url);
         repo.save(link);
         return link.getId();
+    }
+
+    @Override
+    public void clearExpiredLinks(Date expirationDate) {
+        repo.deleteAll(repo.findAllWhereCreatedAtLowerThanDate(expirationDate));
     }
 
     private String doCreateId() {

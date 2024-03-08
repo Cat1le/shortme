@@ -1,13 +1,13 @@
 package org.catile.shortme.controller;
 
-import org.catile.shortme.service.HomeService;
+import org.catile.shortme.service.ShortlinkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
 @RestController
-public record HomeController(HomeService service) {
+public record HomeController(ShortlinkService service) {
     @GetMapping("create")
     public String create(@RequestParam String url) {
         return service.create(url);
